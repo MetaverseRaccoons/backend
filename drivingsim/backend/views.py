@@ -11,6 +11,8 @@ import uuid
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from django.contrib.auth import authenticate, login, logout
+
 
 
 class UserView(generics.GenericAPIView):
@@ -52,5 +54,19 @@ class UserView(generics.GenericAPIView):
             )
 
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PasswordView(generics.GenericAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
-        
+    def post(self, request):
+        username = request.POST['username']
+        old_password = request.POST['old_password']
+        user = authenticate(username=username, password=old_password)
+        if user is not None:
+            login(request, user)
+            user.set_password(request.POST['new_password'])
+            user.save()
+            return Response("Password changed successfully", status=status.HTTP_200_OK)
+        return Response("failed to change password", status=status.HTTP_400_BAD_REQUEST)
+    
