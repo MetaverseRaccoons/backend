@@ -7,4 +7,5 @@ class User(AbstractUser):
     is_instructor = models.BooleanField(default=False)
     national_registration_number = models.CharField(max_length=15, blank=True, null=True)
     has_drivers_license = models.BooleanField(default=False)
+    is_shareable = models.BooleanField(default=False)
 

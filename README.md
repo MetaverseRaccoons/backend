@@ -11,6 +11,14 @@ pip install djangorestframework
 pip install djangorestframework-simplejwt
 ```
 
+## Initialising or updating after pull
+
+Run the following commands to update the database with the latest models:
+```shell
+python manage.py makemigrations
+python manage.py migrate
+```
+
 ## Running
 
 To run the server, run the following command in the `drivingsim` directory:
@@ -74,6 +82,22 @@ Response body
 ```json
 {
   "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwODUyNjc2LCJpYXQiOjE2NzA4NTIzNjgsImp0aSI6Ijg3MmU0YzBiMmM2ZDQ3NWU5ZDlkYjNhZWQyNTNhMzcxIiwidIelcl9pZCI6MX0.QXi_e7tqICU1SlKMOwOlXirejUXm7fyHuRqQa_T87J0"
+}
+```
+
+This access token will also be valid for 5 days and can be used in the same way as the previous access token.
+
+### View your user information
+
+```
+GET /api/user/
+```
+
+Response body
+
+```json
+{
+  "username": "test"
 }
 ```
 
