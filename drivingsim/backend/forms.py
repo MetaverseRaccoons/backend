@@ -5,11 +5,11 @@ from .models import User
 
 
 class CreateUserForm(UserCreationForm):
-    is_learner = forms.BooleanField(required=True)
-    is_instructor = forms.BooleanField(required=True)
-    national_registration_number = forms.CharField(max_length=15, required=False)
-    has_drivers_license = forms.BooleanField(required=True)
-    is_shareable = forms.BooleanField(required=True)
+    is_learner = forms.BooleanField(required=False)
+    is_instructor = forms.BooleanField(required=False)
+    national_registration_number = forms.CharField(max_length=15, required=True)
+    has_drivers_license = forms.BooleanField(required=False)
+    is_shareable = forms.BooleanField(required=False)
 
     class Meta:
         model = User
