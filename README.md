@@ -28,7 +28,7 @@ python manage.py runserver
 
 ## REST API Documentation
 
-Authentication is done using JWTs. All requests use the `application/json` content type.
+Authentication is done using JWTs. All requests use the `application/json` content type, unless stated otherwise.
 
 ### Create an account
 
@@ -36,12 +36,14 @@ Authentication is done using JWTs. All requests use the `application/json` conte
 POST /api/user
 ```
 
-Request body:
+Request body in `x-www-form-urlencoded`:
+
 ```json
 {
     "username": "username",
-    "password": "password",
-    "email": "email",
+    "password1": "password",
+    "password2": "password",
+    "email": "email@domain.com",
     "national_registration_number": "00.00.00-000.00",
     "is_learner": false,
     "is_instructor": false,
@@ -51,6 +53,25 @@ Request body:
 ```
 
 If `is_shareable` is set to `true`, the user's details will be viewable by other users.
+
+Response body:
+
+```json
+{
+    "user": {
+        "username": "username",
+        "email": "email@domain.com",
+        "is_learner": false,
+        "is_instructor": false,
+        "has_drivers_license": false,
+        "is_shareable": false
+    },
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3MzQ1Mzk2MCwiaWF0IjoxNjcwODYxOTYwLCJqdGkiOiJiMTMzYjdhYTgzNjU0ZDdjYjc4MGFhODgyYWZiZmVhNiIsInVzZXJfaWQiOjh9.20JI1zrBf4PS936Klqdw4S9n-KcglC-Jd6kBBkBw67M",
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcxMjkzOTYwLCJpYXQiOjE2NzA4NjE5NjAsImp0aSI6IjViZDZkNDY0NDYxYTRjYmViN2QwMTMwMWE0MmUxYTc4IiwidXNlcl9pZCI6OH0.LTdHxXOrdJjQNZvFrvVlF_tE0jfaWvrR8i5dluij3Ng"
+}
+```
+
+The `access` token can be used for requests that require authentication, while the `refresh` token can be used to refresh the `access` token.
 
 ### Login by generating a JWT
 
