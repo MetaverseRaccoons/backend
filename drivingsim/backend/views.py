@@ -12,3 +12,5 @@ class UserView(APIView):
         serializer = UserSerializer(request.user)
         return JsonResponse(serializer.data)
 
+    def post(self, request):
+        pass

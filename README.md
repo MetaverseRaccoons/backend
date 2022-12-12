@@ -1,6 +1,6 @@
 # Django backend
 
-We are using Django to run a REST API for the app. 
+We are using Django to run a REST API for the app.
 
 ## Setup
 
@@ -16,4 +16,11 @@ pip install djangorestframework-simplejwt
 To run the server, run the following command in the `drivingsim` directory:
 ```shell
 python manage.py runserver
+```
+
+## REST API Documentation
+
+```http
+POST /api/token/
+Body: 
 ```
