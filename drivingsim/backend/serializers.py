@@ -11,5 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'is_learner',
             'is_instructor',
-            'has_drivers_license'
+            'has_drivers_license',
+            'is_shareable',
         ]

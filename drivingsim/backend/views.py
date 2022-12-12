@@ -1,7 +1,9 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from .models import User
 from .serializers import UserSerializer
 from rest_framework import serializers, generics, status
 import uuid
@@ -19,8 +21,17 @@ class UserView(generics.GenericAPIView):
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
-    def get(self, request):
-        serializer = UserSerializer(request.user)
+    def get(self, request, username=None):
+        if username is None:
+            user = request.user
+        else:
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                return Response("User does not exist")
+            if not user.is_shareable:
+                return HttpResponse("User is private", status=403)
+        serializer = UserSerializer(user)
         return JsonResponse(serializer.data)
 
     def post(self, request):    
