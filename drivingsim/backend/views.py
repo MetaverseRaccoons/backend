@@ -10,6 +10,7 @@ from rest_framework import serializers, generics, status
 import uuid
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from django.contrib.auth import authenticate, login, logout
 
@@ -78,15 +79,7 @@ class FriendsView(generics.GenericAPIView):
     
     @api_view(['POST'])
     def send_friend_request(request, userID):
-        
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-        else:
-            return Response("User not logged in", status=status.HTTP_400_BAD_REQUEST)
-        from_user = user
+        from_user = JWTAuthentication().authenticate(request)[0]
         to_user = User.objects.get(id=userID)
         friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
         if created:
@@ -101,14 +94,7 @@ class FriendsView(generics.GenericAPIView):
 
     @api_view(['POST'])
     def accept_friend_request(request, requestID):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-        else:
-            return Response("User not logged in", status=status.HTTP_400_BAD_REQUEST)
-        
+        user = JWTAuthentication().authenticate(request)[0]
         friend_request = Friend_Request.objects.get(id=requestID)
         if friend_request.to_user == user:
             friend_request.to_user.friends.add(friend_request.from_user)
@@ -120,14 +106,7 @@ class FriendsView(generics.GenericAPIView):
         
     @api_view(['POST'])
     def decline_friend_request(request, requestID):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-        else:
-            return Response("User not logged in", status=status.HTTP_400_BAD_REQUEST)
-        
+        user = JWTAuthentication().authenticate(request)[0]
         friend_request = Friend_Request.objects.get(id=requestID)
         if friend_request.to_user == user or friend_request.from_user == user:
             friend_request.delete()
