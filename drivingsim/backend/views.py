@@ -13,8 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth import authenticate, login, logout
 
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
 
 
 class UserView(generics.GenericAPIView):
@@ -77,7 +76,6 @@ class FriendsView(generics.GenericAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
     
- 
     @api_view(['POST'])
     def send_friend_request(request, userID):
         
@@ -119,3 +117,20 @@ class FriendsView(generics.GenericAPIView):
             return Response("Friend request accepted", status=status.HTTP_200_OK)
         else:
             return Response("Friend request not accepted", status=status.HTTP_404_NOT_FOUND)
+        
+    @api_view(['POST'])
+    def decline_friend_request(request, requestID):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+        else:
+            return Response("User not logged in", status=status.HTTP_400_BAD_REQUEST)
+        
+        friend_request = Friend_Request.objects.get(id=requestID)
+        if friend_request.to_user == user or friend_request.from_user == user:
+            friend_request.delete()
+            return Response("Friend request declined", status=status.HTTP_200_OK)
+        else:
+            return Response("Friend request not declined", status=status.HTTP_404_NOT_FOUND)

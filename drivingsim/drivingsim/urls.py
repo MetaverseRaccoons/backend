@@ -16,5 +16,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/user/send_friend_request/<int:userID>/', views.FriendsView.send_friend_request, name='friend_request'),
     path('api/user/accept_friend_request/<int:requestID>/', views.FriendsView.accept_friend_request, name='accept_friend_request'),
+    path('api/user/decline_friend_request/<int:requestID>/', views.FriendsView.decline_friend_request, name='decline_friend_request'),
 ]
 
