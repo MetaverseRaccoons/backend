@@ -10,7 +10,7 @@ class CreateUserForm(UserCreationForm):
     national_registration_number = forms.CharField(max_length=15, required=True)
     has_drivers_license = forms.BooleanField(required=False)
     is_shareable = forms.BooleanField(required=False)
-
+    
     class Meta:
         model = User
         fields = (
