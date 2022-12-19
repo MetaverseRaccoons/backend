@@ -41,8 +41,8 @@ class UserView(generics.GenericAPIView):
         return JsonResponse(serializer.data)
 
     def post(self, request):
-        form = CreateUserForm(request.data)
-        #form = CreateUserForm(request.POST) # testing
+        #form = CreateUserForm(request.data)
+        form = CreateUserForm(request.POST) # testing
         print(form.errors)
         if form.is_valid():
             user = form.save()
