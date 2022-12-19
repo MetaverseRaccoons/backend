@@ -35,7 +35,7 @@ class UserView(generics.GenericAPIView):
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
                 return Response("User does not exist")
-            if not user.is_shareable:
+            if not user.is_shareable and username != None:
                 return HttpResponse("User is private", status=403)
         serializer = UserSerializer(user)
         return JsonResponse(serializer.data)
