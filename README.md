@@ -1,4 +1,4 @@
-# Django backend
+# P&O driving simulator backend
 
 We are using Django to run a REST API for the app.
 
@@ -19,11 +19,21 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Running
+## Testing
 
 To run the server, run the following command in the `drivingsim` directory:
 ```shell
 python manage.py runserver
+```
+
+You may want to create a superuser to access the admin panel or to use as a dummy account:
+```shell
+python manage.py createsuperuser --username=test --email=test@test.com
+````
+
+If you want to play around with user models, you can use the Django shell:
+```shell
+python manage.py shell
 ```
 
 ## REST API Documentation
