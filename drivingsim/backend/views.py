@@ -1,20 +1,18 @@
 from django.http import JsonResponse, HttpResponse
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import CreateUserForm
-from .models import User, Friend_Request
-from .serializers import UserSerializer
-from rest_framework import serializers, generics, status
-import uuid
+from .models import Friends
+from .serializers import UserSerializer, FriendsSerializer
+from rest_framework import generics, status
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 
 class UserView(generics.GenericAPIView):
@@ -34,16 +32,14 @@ class UserView(generics.GenericAPIView):
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
-                return Response("User does not exist")
-            if not user.is_shareable and username != None:
-                return HttpResponse("User is private", status=403)
+                return JsonResponse({'error': "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            if not user.is_shareable and username is not None:
+                return JsonResponse({'error': "User is private"}, status=status.HTTP_403_FORBIDDEN)
         serializer = UserSerializer(user)
         return JsonResponse(serializer.data)
 
     def post(self, request):
-        #form = CreateUserForm(request.data)
-        form = CreateUserForm(request.POST) # testing
-        print(form.errors)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             refresh = RefreshToken.for_user(user)
@@ -73,43 +69,53 @@ class PasswordView(generics.GenericAPIView):
             return Response("Password changed successfully", status=status.HTTP_200_OK)
         return Response("failed to change password", status=status.HTTP_400_BAD_REQUEST)
 
-class FriendsView(generics.GenericAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-    
-    @api_view(['POST'])
-    def send_friend_request(request, userID):
-        from_user = JWTAuthentication().authenticate(request)[0]
-        to_user = User.objects.get(id=userID)
-        friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
-        if created:
-            return JsonResponse(
-                {
-                    'status': "Friend request sent",
-                    'httpstatus': status.HTTP_200_OK,
-                    'id': friend_request.id,
-                })
-        else:
-            return Response("Friend request was already sent", status=status.HTTP_200_OK)
 
-    @api_view(['POST'])
-    def accept_friend_request(request, requestID):
-        user = JWTAuthentication().authenticate(request)[0]
-        friend_request = Friend_Request.objects.get(id=requestID)
-        if friend_request.to_user == user:
-            friend_request.to_user.friends.add(friend_request.from_user)
-            friend_request.from_user.friends.add(friend_request.to_user)
-            friend_request.delete()
-            return Response("Friend request accepted", status=status.HTTP_200_OK)
-        else:
-            return Response("Friend request not accepted", status=status.HTTP_404_NOT_FOUND)
-        
-    @api_view(['POST'])
-    def decline_friend_request(request, requestID):
-        user = JWTAuthentication().authenticate(request)[0]
-        friend_request = Friend_Request.objects.get(id=requestID)
-        if friend_request.to_user == user or friend_request.from_user == user:
-            friend_request.delete()
-            return Response("Friend request declined", status=status.HTTP_200_OK)
-        else:
-            return Response("Friend request not declined", status=status.HTTP_404_NOT_FOUND)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_friend_request(request, to_username):
+    from_user = request.user
+    try:
+        to_user = User.objects.get(username=to_username)
+    except User.DoesNotExist:
+        return JsonResponse({'error': "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    if to_user.get_friend_requests().filter(from_user=from_user).exists():
+        return JsonResponse({'error': "Friend request already sent"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if from_user.get_friend_requests().filter(to_user=to_user).exists():
+        return JsonResponse({'error': "Friend request already received"}, status=status.HTTP_400_BAD_REQUEST)
+
+    friends = Friends.objects.get_or_create(from_user=from_user, to_user=to_user)
+    friends.save()
+
+    return JsonResponse({'success': "Friend request sent"}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def accept_friend_request(request, from_username):
+    to_user = request.user
+    try:
+        from_user = User.objects.get(username=from_username)
+    except User.DoesNotExist:
+        return JsonResponse({'error': "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        friends = Friends.objects.get(from_user=from_user, to_user=to_user)
+    except Friends.DoesNotExist:
+        return JsonResponse({'error': "Friend request does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    friends.accepted = True
+    friends.save()
+
+    return JsonResponse({'message': "Friend request accepted"}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_friends(request):
+    user = request.user
+    friends = user.list_friends()
+    serializer = FriendsSerializer(friends, many=True)
+    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+
