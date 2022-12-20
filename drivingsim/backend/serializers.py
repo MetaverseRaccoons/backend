@@ -1,6 +1,5 @@
 from rest_framework import serializers
-
-from .models import User
+from .models import User, Friends
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,4 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
             'is_instructor',
             'has_drivers_license',
             'is_shareable',
+        ]
+
+
+class FriendsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friends
+        fields = [
+            'from_user',
+            'to_user',
+            'accepted',
         ]
