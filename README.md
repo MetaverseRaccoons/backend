@@ -147,6 +147,12 @@ This access token will also be valid for 5 days and can be used in the same way 
 GET /api/user/
 ```
 
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
 Response body:
 
 ```json
@@ -159,6 +165,12 @@ Response body:
 
 ```
 GET /api/user/<username>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
 ```
 
 Response body:
