@@ -160,4 +160,81 @@ Response body:
 
 If the user is set to private, the response will be an error message and the status code will be `403`.
 
+### Send a friend request
 
+```
+POST api/friend/<str:username>/send/
+```
+
+Response body:
+
+User doesn't exist:
+```json
+{
+    "error": "User does not exist"
+}
+```
+
+Friend request already sent:
+```json
+{
+    "error": "Friend request already sent"
+}
+```
+
+Friend request already received:
+```json
+{
+    "error": "Friend request already received"
+}
+```
+
+Friend request succesfully sent:
+```json
+{
+    "success": "Friend request sent"
+}
+```
+
+### Accept a friend request
+
+```
+POST api/friend/<str:username>/accept
+```
+
+Response body:
+
+
+User does not exist:
+```json
+{
+    "error": "User does not exist"
+}
+```
+
+Friend request does not exist:
+```json
+{
+    "error": "Friend request does not exist"
+}
+```
+
+Friend request succesfully accepted:
+```json
+{
+    "success": "Friend request accepted"
+}
+```
+
+### View your friends
+
+```
+GET api/friend/
+```
+
+Response body:
+```json
+{
+    "friends": "test"
+}
+```
