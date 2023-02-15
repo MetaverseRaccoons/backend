@@ -10,6 +10,7 @@ pip install django
 pip install djangorestframework
 pip install djangorestframework-simplejwt
 pip install django-cors-headers
+pip install django-extensions
 ```
 
 ## Initialising or updating after pull
@@ -36,6 +37,62 @@ If you want to play around with user models, you can use the Django shell:
 ```shell
 python manage.py shell
 ```
+
+To create 4 dummy accounts run the following command:
+```shell
+python manage.py runscript scripts.creation_script
+````
+
+The following accounts will be added to the database:
+```json
+    testUser1 = {
+        "username": "testuser1",
+        "password1": "TestPass8263",
+        "password2": "TestPass8263",
+        "email": "testuser1@domain.com",
+        "national_registration_number": "01.20.07-050.90",
+        "is_learner": True,
+        "is_instructor": False,
+        "has_drivers_license": True,
+        "is_shareable": True
+    }
+    
+    testUser2 = {
+        "username": "testuser2",
+        "password1": "TestPass8264",
+        "password2": "TestPass8264",
+        "email": "testuser2@domain.com",
+        "national_registration_number": "12.00.05-030.00",
+        "is_learner": True,
+        "is_instructor": False,
+        "has_drivers_license": False,
+        "is_shareable": True
+    }
+    
+    testInstructor1 = {
+        "username": "testinstructor1",
+        "password1": "TestPass8265",
+        "password2": "TestPass8265",
+        "email": "testinstructor1@domain.com",
+        "national_registration_number": "60.60.06-060.00",
+        "is_learner": False,
+        "is_instructor": True,
+        "has_drivers_license": True,
+        "is_shareable": True        
+    }
+    
+    testInstructor2 = {
+        "username": "testinstructor2",
+        "password1": "TestPass8266",
+        "password2": "TestPass8266",
+        "email": "testinstructor2@domain.com",
+        "national_registration_number": "09.30.70-210.10",
+        "is_learner": False,
+        "is_instructor": True,
+        "has_drivers_license": True,
+        "is_shareable": True
+    }
+````
 
 ## REST API Documentation
 
