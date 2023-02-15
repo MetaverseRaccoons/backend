@@ -9,6 +9,7 @@ Install the following packages with pip:
 pip install django
 pip install djangorestframework
 pip install djangorestframework-simplejwt
+pip install django-cors-headers
 ```
 
 ## Initialising or updating after pull
