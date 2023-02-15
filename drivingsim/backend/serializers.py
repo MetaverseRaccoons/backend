@@ -16,6 +16,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class FriendsSerializer(serializers.ModelSerializer):
+    from_user = UserSerializer()
+    to_user = UserSerializer()
+
     class Meta:
         model = Friends
         fields = [
