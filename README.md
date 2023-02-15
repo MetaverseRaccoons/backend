@@ -1,4 +1,4 @@
-# Django backend
+# P&O driving simulator backend
 
 We are using Django to run a REST API for the app.
 
@@ -9,6 +9,7 @@ Install the following packages with pip:
 pip install django
 pip install djangorestframework
 pip install djangorestframework-simplejwt
+pip install django-cors-headers
 ```
 
 ## Initialising or updating after pull
@@ -19,11 +20,21 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Running
+## Testing
 
 To run the server, run the following command in the `drivingsim` directory:
 ```shell
 python manage.py runserver
+```
+
+You may want to create a superuser to access the admin panel or to use as a dummy account:
+```shell
+python manage.py createsuperuser --username=test --email=test@test.com
+````
+
+If you want to play around with user models, you can use the Django shell:
+```shell
+python manage.py shell
 ```
 
 ## REST API Documentation
@@ -136,6 +147,12 @@ This access token will also be valid for 5 days and can be used in the same way 
 GET /api/user/
 ```
 
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
 Response body:
 
 ```json
@@ -148,6 +165,12 @@ Response body:
 
 ```
 GET /api/user/<username>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
 ```
 
 Response body:
