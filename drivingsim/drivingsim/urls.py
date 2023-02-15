@@ -17,6 +17,6 @@ urlpatterns = [
     path('api/friend/request/<str:to_username>/send/', views.send_friend_request, name='friend_request'),
     path('api/friend/request/<str:from_username>/accept/', views.accept_friend_request, name='accept_friend_request'),
     path('api/friend/request/', views.friend_requests, name='friend_requests'),
-    path('api/friend/all/', views.all_friends, name='all_friends'),
+    path('api/friend/', views.all_friends, name='all_friends'),
 ]
 

@@ -39,15 +39,13 @@ python manage.py shell
 
 ## REST API Documentation
 
-Authentication is done using JWTs. All requests use the `application/json` content type, unless stated otherwise.
+Authentication is done using JWTs. All requests use the `application/json` content type, unless stated otherwise. All request bodies and responses are in JSON format.
 
 ### Create an account
 
 ```
 POST /api/user
 ```
-
-Request body in `x-www-form-urlencoded`:
 
 ```json
 {
@@ -157,7 +155,12 @@ Response body:
 
 ```json
 {
-    "username": "test"
+    "username": "username",
+    "email": "email@domain.com",
+    "is_learner": false,
+    "is_instructor": false,
+    "has_drivers_license": false,
+    "is_shareable": false
 }
 ```
 
@@ -177,7 +180,12 @@ Response body:
 
 ```json
 {
-    "username": "test"
+    "username": "username",
+    "email": "email@domain.com",
+    "is_learner": false,
+    "is_instructor": false,
+    "has_drivers_license": false,
+    "is_shareable": false
 }
 ```
 
@@ -186,78 +194,118 @@ If the user is set to private, the response will be an error message and the sta
 ### Send a friend request
 
 ```
-POST api/friend/<str:username>/send/
+POST /api/friend/request/<str:to_username>/send/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
 ```
 
 Response body:
-
-User doesn't exist:
-```json
+```
 {
-    "error": "User does not exist"
+    "message": "User does not exist/Friend request already sent/Friend request already received/Friend request sent"
 }
 ```
 
-Friend request already sent:
-```json
-{
-    "error": "Friend request already sent"
-}
-```
-
-Friend request already received:
-```json
-{
-    "error": "Friend request already received"
-}
-```
-
-Friend request succesfully sent:
-```json
-{
-    "success": "Friend request sent"
-}
-```
+If the user is not found, the response code is `404`. If the friend request fails, the response code is `400`. If the friend request is sent, the response code is `200`.
 
 ### Accept a friend request
 
 ```
-POST api/friend/<str:username>/accept
+POST /api/friend/request/<str:from_username>/accept
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
 ```
 
 Response body:
 
-
-User does not exist:
-```json
+```
 {
-    "error": "User does not exist"
+    "message": "User does not exist/Friend request does not exist/Friend request accepted"
 }
 ```
 
-Friend request does not exist:
-```json
-{
-    "error": "Friend request does not exist"
-}
+If the user or friend request does not exist, the response code is `404`. If the friend request fails, the response code is `400`. If the friend request is accepted, the response code is `200`.
+
+### View your received friend requests
+
+```
+GET /api/friend/request/
 ```
 
-Friend request succesfully accepted:
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
 ```json
-{
-    "success": "Friend request accepted"
-}
+[
+  {
+    "from_user": {
+      "username": "test1",
+      "email": "test1@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false
+    },
+    "to_user": {
+      "username": "test2",
+      "email": "test2@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false
+    },
+    "accepted": true
+  }
+]
 ```
 
 ### View your friends
 
 ```
-GET api/friend/
+GET /api/friend/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
 ```
 
 Response body:
+
 ```json
-{
-    "friends": "test"
-}
+[
+  {
+    "from_user": {
+      "username": "test1",
+      "email": "test1@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false
+    },
+    "to_user": {
+      "username": "test2",
+      "email": "test2@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false
+    },
+    "accepted": true
+  }
+]
 ```
