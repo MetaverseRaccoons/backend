@@ -44,7 +44,7 @@ python manage.py runscript scripts.creation_script
 ````
 
 The following accounts will be added to the database:
-```json
+```js
     testUser1 = {
         "username": "testuser1",
         "password1": "TestPass8263",
