@@ -35,7 +35,7 @@ class UserView(generics.GenericAPIView):
             if not user.is_shareable and username is not None:
                 return JsonResponse({'message': "User is private"}, status=status.HTTP_403_FORBIDDEN)
         serializer = UserSerializer(user)
-        return JsonResponse(serializer.data)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         form = CreateUserForm(request.data)
@@ -49,7 +49,7 @@ class UserView(generics.GenericAPIView):
                     'refresh': str(refresh),
                     'access': str(refresh.access_token)
                 },
-                status=201
+                status=status.HTTP_201_CREATED
             )
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
     
