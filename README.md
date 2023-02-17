@@ -4,7 +4,12 @@ We are using Django to run a REST API for the app.
 
 ## Setup
 
-Install the following packages with pip:
+Install all necessary packages at once with pip:
+```shell
+pip install -r requirements.txt
+```
+
+Install the packages separate with pip:
 ```shell
 pip install django
 pip install djangorestframework
