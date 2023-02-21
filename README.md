@@ -1,15 +1,33 @@
 # P&O driving simulator backend
 
-We are using Django to run a REST API for the app.
+We are using Django to run a REST API. 
+
+## Table of contents
+
+1. [Setup](#setup)
+2. [Initialising or updating after pull](#initialising-or-updating-after-pull)
+3. [Testing](#testing)
+4. [REST API Documentation](#rest-api-documentation)
+    1. [Create an account](#create-an-account)
+    2. [Login by generating a JWT](#login-by-generating-a-jwt)
+    3. [Refresh an access token](#refresh-an-access-token)
+    4. [View your user information](#view-your-user-information)
+    5. [View other user's information](#view-other-users-information)
+    6. [Send a friend request](#send-a-friend-request)
+    7. [Accept a friend request](#accept-a-friend-request)
+    8. [Decline a friend request](#decline-a-friend-request)
+    9. [Remove a friend or friend request](#remove-a-friend-or-friend-request)
+   10. [View your received friend requests](#view-your-received-friend-requests)
+   11. [View your friends](#view-your-friends)
 
 ## Setup
 
-Install all necessary packages at once with pip:
+You can install all necessary packages at once with `pip`:
 ```shell
 pip install -r requirements.txt
 ```
 
-Install the packages separate with pip:
+Or you can install the packages one by one with `pip`:
 ```shell
 pip install django
 pip install djangorestframework
@@ -43,60 +61,60 @@ If you want to play around with user models, you can use the Django shell:
 python manage.py shell
 ```
 
-To create 4 dummy accounts run the following command:
+To create 4 dummy accounts, run the following command:
 ```shell
 python manage.py runscript scripts.creation_script
 ````
 
 The following accounts will be added to the database:
 ```js
-    testUser1 = {
-        "username": "testuser1",
-        "password1": "TestPass8263",
-        "password2": "TestPass8263",
-        "email": "testuser1@domain.com",
-        "national_registration_number": "01.20.07-050.90",
-        "is_learner": True,
-        "is_instructor": False,
-        "has_drivers_license": True,
-        "is_shareable": True
-    }
-    
-    testUser2 = {
-        "username": "testuser2",
-        "password1": "TestPass8264",
-        "password2": "TestPass8264",
-        "email": "testuser2@domain.com",
-        "national_registration_number": "12.00.05-030.00",
-        "is_learner": True,
-        "is_instructor": False,
-        "has_drivers_license": False,
-        "is_shareable": True
-    }
-    
-    testInstructor1 = {
-        "username": "testinstructor1",
-        "password1": "TestPass8265",
-        "password2": "TestPass8265",
-        "email": "testinstructor1@domain.com",
-        "national_registration_number": "60.60.06-060.00",
-        "is_learner": False,
-        "is_instructor": True,
-        "has_drivers_license": True,
-        "is_shareable": True        
-    }
-    
-    testInstructor2 = {
-        "username": "testinstructor2",
-        "password1": "TestPass8266",
-        "password2": "TestPass8266",
-        "email": "testinstructor2@domain.com",
-        "national_registration_number": "09.30.70-210.10",
-        "is_learner": False,
-        "is_instructor": True,
-        "has_drivers_license": True,
-        "is_shareable": True
-    }
+testUser1 = {
+    "username": "testuser1",
+    "password1": "TestPass8263",
+    "password2": "TestPass8263",
+    "email": "testuser1@domain.com",
+    "national_registration_number": "01.20.07-050.90",
+    "is_learner": True,
+    "is_instructor": False,
+    "has_drivers_license": True,
+    "is_shareable": True
+}
+
+testUser2 = {
+    "username": "testuser2",
+    "password1": "TestPass8264",
+    "password2": "TestPass8264",
+    "email": "testuser2@domain.com",
+    "national_registration_number": "12.00.05-030.00",
+    "is_learner": True,
+    "is_instructor": False,
+    "has_drivers_license": False,
+    "is_shareable": True
+}
+
+testInstructor1 = {
+    "username": "testinstructor1",
+    "password1": "TestPass8265",
+    "password2": "TestPass8265",
+    "email": "testinstructor1@domain.com",
+    "national_registration_number": "60.60.06-060.00",
+    "is_learner": False,
+    "is_instructor": True,
+    "has_drivers_license": True,
+    "is_shareable": True        
+}
+
+testInstructor2 = {
+    "username": "testinstructor2",
+    "password1": "TestPass8266",
+    "password2": "TestPass8266",
+    "email": "testinstructor2@domain.com",
+    "national_registration_number": "09.30.70-210.10",
+    "is_learner": False,
+    "is_instructor": True,
+    "has_drivers_license": True,
+    "is_shareable": True
+}
 ````
 
 ## REST API Documentation
@@ -106,7 +124,7 @@ Authentication is done using JWTs. All requests use the `application/json` conte
 ### Create an account
 
 ```
-POST /api/user
+POST /api/user/
 ```
 
 ```json
@@ -256,7 +274,7 @@ If the user is set to private, the response will be an error message and the sta
 ### Send a friend request
 
 ```
-POST /api/friend/request/<str:to_username>/send/
+POST /api/friend/request/<to_username>/send/
 ```
 
 Headers:
@@ -277,7 +295,7 @@ If the user is not found, the response code is `404`. If the friend request fail
 ### Accept a friend request
 
 ```
-POST /api/friend/request/<str:from_username>/accept
+POST /api/friend/request/<from_username>/accept/
 ```
 
 Headers:
@@ -295,6 +313,46 @@ Response body:
 ```
 
 If the user or friend request does not exist, the response code is `404`. If the friend request fails, the response code is `400`. If the friend request is accepted, the response code is `200`.
+
+### Decline a friend request
+
+```
+POST /api/friend/request/<from_username>/decline/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+```
+{
+    "message": "User does not exist/Friend request does not exist/Friend request declined"
+}
+```
+
+### Remove a friend or friend request
+
+```
+POST /api/friend/<from_username>/remove/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+```
+{
+    "message": "User does not exist/Friend does not exist/Friend removed"
+}
+```
 
 ### View your received friend requests
 

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -108,6 +109,44 @@ def accept_friend_request(request, from_username):
     friends.save()
 
     return JsonResponse({'message': "Friend request accepted"}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def decline_friend_request(request, from_username):
+    to_user = request.user
+    try:
+        from_user = User.objects.get(username=from_username)
+    except User.DoesNotExist:
+        return JsonResponse({'message': "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        friends = Friends.objects.get(from_user=from_user, to_user=to_user)
+    except Friends.DoesNotExist:
+        return JsonResponse({'message': "Friend request does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    friends.delete()
+
+    return JsonResponse({'message': "Friend request declined"}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_friend(request, username):
+    user = request.user
+    try:
+        friend = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({'message': "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        friends = Friends.objects.get((Q(from_user=user) & Q(to_user=friend)) | (Q(to_user=user) | Q(from_user=friend)))
+    except Friends.DoesNotExist:
+        return JsonResponse({'message': "Friend does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    friends.delete()
+
+    return JsonResponse({'message': "Friend removed"}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
