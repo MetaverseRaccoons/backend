@@ -11,7 +11,7 @@ We are using Django to run a REST API.
     1. [Create an account](#create-an-account)
     2. [Login by generating a JWT](#login-by-generating-a-jwt)
     3. [Refresh an access token](#refresh-an-access-token)
-    5. [Delete your account](#delete-an-account)] 
+    5. [Delete your account](#delete-your-account) 
     4. [View your user information](#view-your-user-information)
     5. [View other user's information](#view-other-users-information)
     6. [Send a friend request](#send-a-friend-request)
