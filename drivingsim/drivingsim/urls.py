@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', views.UserView.as_view(), name='user'),
     path('api/user/passwordchange/', views.PasswordView.as_view(), name='password_change'),
+    path('api/user/delete/', views.delete_account, name='delete_account'),
     path('api/user/<str:username>/', views.UserView.as_view(), name='view_user'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

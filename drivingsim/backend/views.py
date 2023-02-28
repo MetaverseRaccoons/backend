@@ -166,3 +166,11 @@ def all_friends(request):
     serializer = FriendsSerializer(friends, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    user = request.user
+    user.delete()
+    return JsonResponse({'message': "Account deleted"}, status=status.HTTP_200_OK)
+
