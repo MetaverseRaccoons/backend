@@ -11,15 +11,15 @@ We are using Django to run a REST API.
     1. [Create an account](#create-an-account)
     2. [Login by generating a JWT](#login-by-generating-a-jwt)
     3. [Refresh an access token](#refresh-an-access-token)
-    5. [Delete your account](#delete-your-account) 
-    4. [View your user information](#view-your-user-information)
-    5. [View other user's information](#view-other-users-information)
-    6. [Send a friend request](#send-a-friend-request)
-    7. [Accept a friend request](#accept-a-friend-request)
-    8. [Decline a friend request](#decline-a-friend-request)
-    9. [Remove a friend or friend request](#remove-a-friend-or-friend-request)
-   10. [View your received friend requests](#view-your-received-friend-requests)
-   11. [View your friends](#view-your-friends)
+    4. [Delete your account](#delete-an-account)] 
+    5. [View your user information](#view-your-user-information)
+    6. [View other user's information](#view-other-users-information)
+    7. [Send a friend request](#send-a-friend-request)
+    8. [Accept a friend request](#accept-a-friend-request)
+    9. [Decline a friend request](#decline-a-friend-request)
+   10. [Remove a friend or friend request](#remove-a-friend-or-friend-request)
+   11. [View your received friend requests](#view-your-received-friend-requests)
+   12. [View your friends](#view-your-friends)
 
 ## Setup
 
