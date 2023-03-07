@@ -21,5 +21,7 @@ urlpatterns = [
     path('api/friend/<str:username>/remove/', views.remove_friend, name='remove_friend'),
     path('api/friend/request/', views.friend_requests, name='friend_requests'),
     path('api/friend/', views.all_friends, name='all_friends'),
+    path('api/violation/', views.violation, name='add_or_view_violation'),
+    path('api/violation/<str:username>/', views.other_violations, name='other_violations'),
 ]
 

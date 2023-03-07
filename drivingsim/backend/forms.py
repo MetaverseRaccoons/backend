@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import User
+from .models import User, Violation
 
 
 class CreateUserForm(UserCreationForm):
@@ -24,3 +24,18 @@ class CreateUserForm(UserCreationForm):
             'has_drivers_license',
             'is_shareable'
         )
+
+
+class AddViolationForm(forms.ModelForm):
+    type = forms.CharField(max_length=50)
+    severity = forms.FloatField()
+    description = forms.TextInput()
+
+    class Meta:
+        model = Violation
+        fields = (
+            'type',
+            'severity',
+            'description'
+        )
+

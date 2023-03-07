@@ -9,6 +9,8 @@ class User(AbstractUser):
     national_registration_number = models.CharField(max_length=15, blank=True, null=True)
     has_drivers_license = models.BooleanField(default=False)
     is_shareable = models.BooleanField(default=False)
+    km_driven = models.FloatField(default=0.0)
+    minutes_driven = models.FloatField(default=0.0)
 
     def get_friends(self):
         return Friends.objects.filter(Q(from_user=self) | Q(to_user=self), accepted=True)
@@ -21,6 +23,9 @@ class User(AbstractUser):
 
     def is_friend(self, user):
         return self.get_friends().filter(Q(from_user=user) | Q(to_user=user)).exists()
+
+    def get_violations(self):
+        return Violation.objects.filter(user=self)
 
 
 class Friends(models.Model):
@@ -36,4 +41,11 @@ class Friends(models.Model):
             models.UniqueConstraint(fields=['from_user', 'to_user'], name='unique_friend_request'),
         ]
 
+
+class Violation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    time = models.DateTimeField(auto_now_add=True)
+    type = models.CharField(max_length=50)
+    severity = models.FloatField()
+    description = models.TextField()
 

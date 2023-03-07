@@ -20,6 +20,9 @@ We are using Django to run a REST API.
    10. [Remove a friend or friend request](#remove-a-friend-or-friend-request)
    11. [View your received friend requests](#view-your-received-friend-requests)
    12. [View your friends](#view-your-friends)
+   13. [Add a traffic violation](#add-a-traffic-violation)
+   14. [View your traffic violations](#view-your-traffic-violations)
+   15. [View other user's traffic violations](#view-other-users-traffic-violations)
 
 ## Setup
 
@@ -138,7 +141,9 @@ POST /api/user/
     "is_learner": false,
     "is_instructor": false,
     "has_drivers_license": false,
-    "is_shareable": false
+    "is_shareable": false,
+    "km_driven": 0.0,
+    "minutes_driven": 0.0
 }
 ```
 
@@ -154,7 +159,9 @@ Response body:
         "is_learner": false,
         "is_instructor": false,
         "has_drivers_license": false,
-        "is_shareable": false
+        "is_shareable": false,
+        "km_driven": 0.0,
+        "minutes_driven": 0.0
     },
     "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3MzQ1Mzk2MCwiaWF0IjoxNjcwODYxOTYwLCJqdGkiOiJiMTMzYjdhYTgzNjU0ZDdjYjc4MGFhODgyYWZiZmVhNiIsInVzZXJfaWQiOjh9.20JI1zrBf4PS936Klqdw4S9n-KcglC-Jd6kBBkBw67M",
     "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcxMjkzOTYwLCJpYXQiOjE2NzA4NjE5NjAsImp0aSI6IjViZDZkNDY0NDYxYTRjYmViN2QwMTMwMWE0MmUxYTc4IiwidXNlcl9pZCI6OH0.LTdHxXOrdJjQNZvFrvVlF_tE0jfaWvrR8i5dluij3Ng"
@@ -269,7 +276,9 @@ Response body:
     "is_learner": false,
     "is_instructor": false,
     "has_drivers_license": false,
-    "is_shareable": false
+    "is_shareable": false,
+    "km_driven": 0.0,
+    "minutes_driven": 0.0
 }
 ```
 
@@ -294,7 +303,9 @@ Response body:
     "is_learner": false,
     "is_instructor": false,
     "has_drivers_license": false,
-    "is_shareable": false
+    "is_shareable": false,
+    "km_driven": 0.0,
+    "minutes_driven": 0.0
 }
 ```
 
@@ -406,7 +417,9 @@ Response body:
       "is_learner": false,
       "is_instructor": false,
       "has_drivers_license": false,
-      "is_shareable": false
+      "is_shareable": false, 
+      "km_driven": 0.0,
+      "minutes_driven": 0.0
     },
     "to_user": {
       "username": "test2",
@@ -414,7 +427,9 @@ Response body:
       "is_learner": false,
       "is_instructor": false,
       "has_drivers_license": false,
-      "is_shareable": false
+      "is_shareable": false, 
+      "km_driven": 0.0,
+      "minutes_driven": 0.0
     },
     "accepted": true
   }
@@ -444,7 +459,9 @@ Response body:
       "is_learner": false,
       "is_instructor": false,
       "has_drivers_license": false,
-      "is_shareable": false
+      "is_shareable": false, 
+      "km_driven": 0.0,
+      "minutes_driven": 0.0
     },
     "to_user": {
       "username": "test2",
@@ -452,9 +469,92 @@ Response body:
       "is_learner": false,
       "is_instructor": false,
       "has_drivers_license": false,
-      "is_shareable": false
+      "is_shareable": false,
+      "km_driven": 0.0,
+      "minutes_driven": 0.0
     },
     "accepted": true
   }
 ]
 ```
+
+### Add a traffic violation
+
+```
+POST /api/violation/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Request body:
+
+```json
+{
+  "type": "speeding",
+  "severity": 0.75,
+  "description": "Speeding in a 30km/h zone"
+}
+```
+
+Response body:
+
+```json
+{
+   "message": "Violation added"
+}
+```
+
+### View your traffic violations
+
+```
+GET /api/violation/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+ ```json
+ [
+    {
+        "type": "speeding",
+        "severity": 0.75,
+        "description": "Speeding in a 30km/h zone",
+        "date": "2021-07-31T00:00:00Z"
+    }
+]
+ ```
+
+### View other user's traffic violations
+
+```
+GET /api/violation/<username>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+ ```json
+ [
+    {
+        "type": "speeding",
+        "severity": 0.75,
+        "description": "Speeding in a 30km/h zone",
+        "date": "2021-07-31T00:00:00Z"
+    }
+]
+ ```
+

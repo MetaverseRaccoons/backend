@@ -3,9 +3,9 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, AddViolationForm
 from .models import Friends
-from .serializers import UserSerializer, FriendsSerializer
+from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer
 from rest_framework import generics, status
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -174,3 +174,38 @@ def delete_account(request):
     user.delete()
     return JsonResponse({'message': "Account deleted"}, status=status.HTTP_200_OK)
 
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def violation(request):
+    user = request.user
+    if request.method == 'POST':
+        form = AddViolationForm(request.data)
+        if form.is_valid():
+            violation = form.save(commit=False)
+            violation.user = user
+            violation.save()
+            return JsonResponse({'message': "Violation added"}, status=status.HTTP_201_CREATED)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'GET':
+        violations = user.get_violations()
+        serializer = ViolationSerializer(violations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def other_violations(request, username):
+    user = request.user
+
+    try:
+        other_user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({'message': "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    if not user.is_friend(other_user) and other_user.is_shareable:
+        return JsonResponse({'message': "User is private"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    violations = other_user.get_violations()
+    serializer = ViolationSerializer(violations, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
