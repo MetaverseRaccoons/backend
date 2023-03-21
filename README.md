@@ -603,7 +603,7 @@ Response body:
 ### View leaderboard of minutes driven
 
 ```
-GET /api/leaderboard/km/<page_number>/
+GET /api/leaderboard/minutes/<page_number>/
 ```
 
 Headers:
@@ -642,7 +642,7 @@ Response body:
 ### View leaderboard of violations made
 
 ```
-GET /api/leaderboard/km/<page_number>/
+GET /api/leaderboard/violations/<page_number>/
 ```
 
 Headers:
