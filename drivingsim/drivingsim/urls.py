@@ -23,5 +23,8 @@ urlpatterns = [
     path('api/friend/', views.all_friends, name='all_friends'),
     path('api/violation/', views.violation, name='add_or_view_violation'),
     path('api/violation/<str:username>/', views.other_violations, name='other_violations'),
+    path('api/leaderboard/km/<int:page_number>/', views.leaderboard_km_driven, name='leaderboard_km_driven'),
+    path('api/leaderboard/minute_driven/<int:page_number>/', views.leaderboard_minutes_driven, name='leaderboard_minutes_driven'),
+    path('api/leaderboard/violations/<int:page_number>/', views.leaderboard_violations, name='leaderboard_violations'),
 ]
 

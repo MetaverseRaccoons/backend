@@ -1,10 +1,11 @@
-from django.db.models import Q
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q, Count
 from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import CreateUserForm, AddViolationForm
-from .models import Friends
+from .models import Friends, Violation
 from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer
 from rest_framework import generics, status
 from .models import User
@@ -209,3 +210,61 @@ def other_violations(request, username):
     violations = other_user.get_violations()
     serializer = ViolationSerializer(violations, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def leaderboard_km_driven(request, page_number):
+    users = User.objects.filter(is_shareable=True).order_by('-km_driven')
+    paginator = Paginator(users, 20)
+    try:
+        page = paginator.page(page_number)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+
+    serializer = UserSerializer(page.object_list, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET'])
+def leaderboard_minutes_driven(request, page_number):
+    users = User.objects.filter(is_shareable=True).order_by('-minutes_driven')
+    paginator = Paginator(users, 20)
+    try:
+        page = paginator.page(page_number)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+
+    serializer = UserSerializer(page.object_list, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# Query the 'violation' table and return the number of violations for each user
+# Make a leaderboard based on the number of violations
+@api_view(['GET'])
+def leaderboard_violations(request, page_number):
+    objects = Violation.objects.raw('''
+    SELECT backend_violation.id, backend_user.*, COUNT(*) AS num_violations FROM backend_violation
+    INNER JOIN backend_user ON backend_violation.user_id = backend_user.id
+    WHERE backend_user.is_shareable = 1
+    GROUP BY username ORDER BY num_violations DESC
+     ''')
+
+    paginator = Paginator(objects, 20)
+    try:
+        page = paginator.page(page_number)
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+
+    result = []
+    for object in page.object_list:
+        user = UserSerializer(object).data
+        user['violations'] = object.num_violations
+        result.append(user)
+
+    return JsonResponse(result, safe=False)

@@ -11,7 +11,7 @@ We are using Django to run a REST API.
     1. [Create an account](#create-an-account)
     2. [Login by generating a JWT](#login-by-generating-a-jwt)
     3. [Refresh an access token](#refresh-an-access-token)
-    4. [Delete your account](#delete-an-account)] 
+    4. [Delete your account](#delete-your-account)
     5. [View your user information](#view-your-user-information)
     6. [View other user's information](#view-other-users-information)
     7. [Send a friend request](#send-a-friend-request)
@@ -23,6 +23,9 @@ We are using Django to run a REST API.
    13. [Add a traffic violation](#add-a-traffic-violation)
    14. [View your traffic violations](#view-your-traffic-violations)
    15. [View other user's traffic violations](#view-other-users-traffic-violations)
+   16. [View leaderboard of kilometers driven](#view-leaderboard-of-kilometers-driven)
+   17. [View leaderboard of minutes driven](#view-leaderboard-of-minutes-driven)
+   18. [View leaderboard of violations made](#view-leaderboard-of-violations-made)
 
 ## Setup
 
@@ -555,6 +558,125 @@ Response body:
         "description": "Speeding in a 30km/h zone",
         "date": "2021-07-31T00:00:00Z"
     }
+]
+ ```
+
+### View leaderboard of kilometers driven
+
+```
+GET /api/leaderboard/km/<page_number>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+ ```json
+[
+   {
+      "username": "test1",
+      "email": "test1@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false, 
+      "km_driven": 5.0,
+      "minutes_driven": 0.0
+   },
+   {
+      "username": "test2",
+      "email": "test2@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false, 
+      "km_driven": 4.0,
+      "minutes_driven": 0.0
+   }
+]
+ ```
+
+### View leaderboard of minutes driven
+
+```
+GET /api/leaderboard/km/<page_number>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+ ```json
+[
+   {
+      "username": "test1",
+      "email": "test1@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false, 
+      "km_driven": 0.0,
+      "minutes_driven": 5.0
+   },
+   {
+      "username": "test2",
+      "email": "test2@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false, 
+      "km_driven": 4.0,
+      "minutes_driven": 4.0
+   }
+]
+ ```
+
+### View leaderboard of violations made
+
+```
+GET /api/leaderboard/km/<page_number>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+ ```json
+[
+   {
+      "username": "test1",
+      "email": "test1@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false, 
+      "km_driven": 0.0,
+      "minutes_driven": 5.0,
+      "violations": 2
+   },
+   {
+      "username": "test2",
+      "email": "test2@test.com",
+      "is_learner": false,
+      "is_instructor": false,
+      "has_drivers_license": false,
+      "is_shareable": false, 
+      "km_driven": 4.0,
+      "minutes_driven": 4.0,
+      "violations": 1
+   }
 ]
  ```
 
