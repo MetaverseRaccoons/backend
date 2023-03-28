@@ -26,6 +26,8 @@ We are using Django to run a REST API.
    16. [View leaderboard of kilometers driven](#view-leaderboard-of-kilometers-driven)
    17. [View leaderboard of minutes driven](#view-leaderboard-of-minutes-driven)
    18. [View leaderboard of violations made](#view-leaderboard-of-violations-made)
+   19. [Add kilometers](#add-kilometers)
+   20. [Add minutes](#add-minutes)
 
 ## Setup
 
@@ -679,4 +681,61 @@ Response body:
    }
 ]
  ```
+
+
+### Add kilometers
+
+```
+POST /api/km_driven/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Request body:
+
+```json
+{
+  "kilometers": 5.0
+}
+```
+
+Response body:
+
+```json
+{
+   "message": "Kilometers added"
+}
+```
+
+### Add minutes
+
+```
+POST /api/minutes_driven/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Request body:
+
+```json
+{
+  "minutes": 5.0
+}
+```
+
+Response body:
+
+```json
+{
+   "message": "Minutes added"
+}
+```
 

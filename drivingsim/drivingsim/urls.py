@@ -26,5 +26,7 @@ urlpatterns = [
     path('api/leaderboard/km/<int:page_number>/', views.leaderboard_km_driven, name='leaderboard_km_driven'),
     path('api/leaderboard/minutes/<int:page_number>/', views.leaderboard_minutes_driven, name='leaderboard_minutes_driven'),
     path('api/leaderboard/violations/<int:page_number>/', views.leaderboard_violations, name='leaderboard_violations'),
+    path('api/km_driven/', views.add_km_driven, name='km_driven'),
+    path('api/minutes_driven/', views.add_minutes_driven, name='add_minutes_driven')
 ]
 

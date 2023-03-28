@@ -268,3 +268,29 @@ def leaderboard_violations(request, page_number):
         result.append(user)
 
     return JsonResponse(result, safe=False)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_minutes_driven(request):
+    user = request.user
+    minutes = request.data.get('minutes')
+    if minutes is None:
+        return JsonResponse({'message': "Minutes not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.minutes_driven += float(minutes)
+    user.save()
+    return JsonResponse({'message': "Minutes added"}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_km_driven(request):
+    user = request.user
+    kilometers = request.data.get('kilometers')
+    if kilometers is None:
+        return JsonResponse({'message': "Kilometers not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.km_driven += float(kilometers)
+    user.save()
+    return JsonResponse({'message': "Kilometers added"}, status=status.HTTP_200_OK)
+
