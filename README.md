@@ -297,7 +297,7 @@ Response body:
        {
           "level": {
              "name": "Test level",
-             "description": "Test description",
+             "description": "Test description"
           },
           "start_time": "2021-10-01T00:00:00Z",
           "end_time": "2021-10-01T00:00:00Z",
@@ -349,7 +349,7 @@ Response body:
        {
           "level": {
              "name": "Test level",
-             "description": "Test description",
+             "description": "Test description"
           },
           "start_time": "2021-10-01T00:00:00Z",
           "end_time": "2021-10-01T00:00:00Z",
