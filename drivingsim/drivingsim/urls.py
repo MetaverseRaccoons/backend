@@ -8,6 +8,8 @@ from backend import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', views.UserView.as_view(), name='user'),
+    path('api/user/certificate/', views.add_certificate, name='add_certificate'),
+    path('api/user/level_session/', views.add_level_session, name='add_level_session'),
     path('api/user/passwordchange/', views.PasswordView.as_view(), name='password_change'),
     path('api/user/delete/', views.delete_account, name='delete_account'),
     path('api/user/<str:username>/', views.UserView.as_view(), name='view_user'),

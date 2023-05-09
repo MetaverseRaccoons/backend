@@ -43,9 +43,31 @@ class Friends(models.Model):
 
 
 class Violation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='violations')
     time = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=50)
     severity = models.FloatField()
+    description = models.TextField()
+
+
+class Level(models.Model):
+    name = models.TextField(primary_key=True)
+    description = models.TextField()
+
+    def get_sessions(self):
+        return LevelSession.objects.filter(level=self)
+
+
+class LevelSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='level_sessions')
+    level = models.ForeignKey(Level, on_delete=models.CASCADE, related_name='sessions')
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    completed = models.BooleanField(default=False)
+
+
+class Certificate(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='certificates')
+    title = models.TextField()
     description = models.TextField()
 

@@ -28,6 +28,8 @@ We are using Django to run a REST API.
    18. [View leaderboard of violations made](#view-leaderboard-of-violations-made)
    19. [Add kilometers](#add-kilometers)
    20. [Add minutes](#add-minutes)
+   21. [Add a level session](#add-a-level-session)
+   22. [Add a certificate](#add-a-certificate)
 
 ## Setup
 
@@ -739,3 +741,62 @@ Response body:
 }
 ```
 
+### Add a level session
+
+```
+POST /api/user/level_session/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Request body:
+
+```json
+{
+  "level_name": "Test level name",
+  "start_time": "2021-07-31T00:00:00Z", 
+  "end_time": "2021-07-31T00:00:00Z", 
+  "completed": true
+}
+```
+
+Response body:
+
+```json
+{
+   "message": "Level session added"
+}
+```
+
+### Add a certificate
+
+```
+POST /api/user/certificate/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Request body:
+
+```json
+{
+  "title": "Certificate title",
+  "description": "Certificate description"
+}
+```
+
+Response body:
+
+```json
+{
+   "message": "Certificate added"
+}
+```

@@ -4,8 +4,8 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .forms import CreateUserForm, AddViolationForm
-from .models import Friends, Violation
+from .forms import CreateUserForm, AddViolationForm, AddLevelSessionForm, AddCertificateForm
+from .models import Friends, Violation, Level, LevelSession
 from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer
 from rest_framework import generics, status
 from .models import User
@@ -294,3 +294,36 @@ def add_km_driven(request):
     user.save()
     return JsonResponse({'message': "Kilometers added"}, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_certificate(request):
+    user = request.user
+    form = AddCertificateForm(request.data)
+    if form.is_valid():
+        certificate = form.save(commit=False)
+        certificate.user = user
+        certificate.save()
+        return JsonResponse({'message': "Certificate added"}, status=status.HTTP_201_CREATED)
+
+    return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_level_session(request):
+    user = request.user
+    form = AddLevelSessionForm(request.data)
+    if form.is_valid():
+        try:
+            level = Level.objects.get(name=request.data.get('level_name'))
+        except Level.DoesNotExist:
+            return JsonResponse({'message': "Level does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        level_session = form.save(commit=False)
+        level_session.user = user
+        level_session.level = level
+        level_session.save()
+        return JsonResponse({'message': "Level session added"}, status=status.HTTP_201_CREATED)
+
+    return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
