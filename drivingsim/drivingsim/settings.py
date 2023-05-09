@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-655!^v_ht_27shw1to6_9!yx8)qd!q=q@#(72klr2%($(ccqz)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['http://localhost:3000/', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['http://localhost:3000/', 'localhost', '127.0.0.1','10.71.0.213','f603-84-194-100-166.ngrok-free.app']
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
