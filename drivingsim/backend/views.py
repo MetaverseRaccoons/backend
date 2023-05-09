@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import CreateUserForm, AddViolationForm, AddLevelSessionForm, AddCertificateForm
-from .models import Friends, Violation, Level, LevelSession
-from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer
+from .models import Friends, Violation, Level, LevelSession, Certificate
+from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer, CertificateSerializer
 from rest_framework import generics, status
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -329,3 +329,12 @@ def add_level_session(request):
         return JsonResponse({'message': "Level session added"}, status=status.HTTP_201_CREATED)
 
     return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_certificates(request):
+    user = request.user
+    certificates = Certificate.objects.filter(user=user)
+    serializer = CertificateSerializer(certificates, many=True)
+    return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
