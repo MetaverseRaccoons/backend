@@ -39,3 +39,18 @@ class AddViolationForm(forms.ModelForm):
             'description'
         )
 
+
+class AddLevelSessionForm(forms.ModelForm):
+    level_name = forms.CharField(max_length=50)
+    start_time = forms.DateTimeField()
+    end_time = forms.DateTimeField()
+    completed = forms.BooleanField()
+
+    class Meta:
+        model = Violation
+        fields = (
+            'start_time',
+            'end_time',
+            'completed'
+        )
+

@@ -11,6 +11,7 @@ urlpatterns = [
     path('api/user/passwordchange/', views.PasswordView.as_view(), name='password_change'),
     path('api/user/delete/', views.delete_account, name='delete_account'),
     path('api/user/<str:username>/', views.UserView.as_view(), name='view_user'),
+    path('api/user/level_sessions/', views.user_level_sessions, name='user_level_sessions'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
@@ -27,6 +28,9 @@ urlpatterns = [
     path('api/leaderboard/minutes/<int:page_number>/', views.leaderboard_minutes_driven, name='leaderboard_minutes_driven'),
     path('api/leaderboard/violations/<int:page_number>/', views.leaderboard_violations, name='leaderboard_violations'),
     path('api/km_driven/', views.add_km_driven, name='km_driven'),
-    path('api/minutes_driven/', views.add_minutes_driven, name='add_minutes_driven')
+    path('api/minutes_driven/', views.add_minutes_driven, name='add_minutes_driven'),
+    path('api/level/', views.view_levels, name='view_levels'),
+    path('api/level/<str:level_name>/', views.view_level, name='view_level'),
+    path('api/level/<str:level_name>/sessions/', views.level_sessions, name='level_sessions')
 ]
 

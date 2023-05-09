@@ -49,3 +49,19 @@ class Violation(models.Model):
     severity = models.FloatField()
     description = models.TextField()
 
+
+class Level(models.Model):
+    name = models.TextField(primary_key=True)
+    description = models.TextField()
+
+    def get_sessions(self):
+        return LevelSession.objects.filter(level=self)
+
+
+class LevelSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(blank=True, null=True)
+    completed = models.BooleanField(default=False)
+

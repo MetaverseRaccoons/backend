@@ -4,9 +4,10 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .forms import CreateUserForm, AddViolationForm
-from .models import Friends, Violation
-from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer
+from .forms import CreateUserForm, AddViolationForm, AddLevelSessionForm
+from .models import Friends, Violation, Level, LevelSession
+from .serializers import UserSerializer, FriendsSerializer, ViolationSerializer, LevelSerializer, \
+    LevelSessionWithUserSerializer, LevelSessionWithLevelSerializer, BareLevelSessionSerializer
 from rest_framework import generics, status
 from .models import User
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -294,3 +295,45 @@ def add_km_driven(request):
     user.save()
     return JsonResponse({'message': "Kilometers added"}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_levels(request):
+    levels = Level.objects.all()
+    serializer = LevelSerializer(levels, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_level(request, level_name):
+    level = Level.objects.get(name=level_name)
+    serializer = LevelSerializer(level)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def level_sessions(request, level_name):
+    if request.method == 'GET':
+        level = Level.objects.get(name=level_name)
+        sessions = level.get_sessions()
+        serializer = BareLevelSessionSerializer(sessions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        user = request.user
+        level = Level.objects.get(name=level_name)
+        form = AddLevelSessionForm(request.data)
+        if form.is_valid():
+            session = form.save(commit=False)
+            session.user = user
+            session.level = level
+            session.save()
+            return JsonResponse({'message': "Level session added"}, status=status.HTTP_201_CREATED)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_level_sessions(request, level_name):
+    user = request.user
+    level = Level.objects.get(name=level_name)
+    session = LevelSession.objects.get(user=user, level=level)
+    serializer = LevelSessionWithLevelSerializer(session)
+    return Response(serializer.data, status=status.HTTP_200_OK)
