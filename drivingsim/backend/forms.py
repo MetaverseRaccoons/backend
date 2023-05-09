@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
-from .models import User, Violation
+from .models import User, Violation, Certificate, LevelSession
 
 
 class CreateUserForm(UserCreationForm):
@@ -47,10 +47,22 @@ class AddLevelSessionForm(forms.ModelForm):
     completed = forms.BooleanField()
 
     class Meta:
-        model = Violation
+        model = LevelSession
         fields = (
             'start_time',
             'end_time',
             'completed'
+        )
+
+
+class AddCertificateForm(forms.ModelForm):
+    title = forms.CharField(max_length=150)
+    description = forms.Textarea()
+
+    class Meta:
+        model = Certificate
+        fields = (
+            'title',
+            'description'
         )
 
