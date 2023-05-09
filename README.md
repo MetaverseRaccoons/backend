@@ -148,34 +148,7 @@ POST /api/user/
     "is_learner": false,
     "is_instructor": false,
     "has_drivers_license": false,
-    "is_shareable": false,
-    "km_driven": 0.0,
-    "minutes_driven": 0.0,
-    "certificates": [
-       {
-          "title": "Test certificate",
-          "description": "Test description"
-       }
-    ],
-   "level_sessions": [
-       {
-          "level": {
-             "name": "Test level",
-             "description": "Test description",
-          },
-          "start_time": "2021-10-01T00:00:00Z",
-          "end_time": "2021-10-01T00:00:00Z",
-          "completed": false
-       }
-   ],
-   "violations": [
-       {
-          "time": "2021-10-01T00:00:00Z",
-          "type": "Speed",
-          "severity": 0.9,
-          "description": "Driving too fast"
-       }
-   ]
+    "is_shareable": false
 }
 ```
 
@@ -193,7 +166,10 @@ Response body:
         "has_drivers_license": false,
         "is_shareable": false,
         "km_driven": 0.0,
-        "minutes_driven": 0.0
+        "minutes_driven": 0.0,
+        "certificates": [],
+        "violations": [],
+        "level_sessions": []
     },
     "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3MzQ1Mzk2MCwiaWF0IjoxNjcwODYxOTYwLCJqdGkiOiJiMTMzYjdhYTgzNjU0ZDdjYjc4MGFhODgyYWZiZmVhNiIsInVzZXJfaWQiOjh9.20JI1zrBf4PS936Klqdw4S9n-KcglC-Jd6kBBkBw67M",
     "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcxMjkzOTYwLCJpYXQiOjE2NzA4NjE5NjAsImp0aSI6IjViZDZkNDY0NDYxYTRjYmViN2QwMTMwMWE0MmUxYTc4IiwidXNlcl9pZCI6OH0.LTdHxXOrdJjQNZvFrvVlF_tE0jfaWvrR8i5dluij3Ng"
@@ -310,7 +286,32 @@ Response body:
     "has_drivers_license": false,
     "is_shareable": false,
     "km_driven": 0.0,
-    "minutes_driven": 0.0
+    "minutes_driven": 0.0,
+    "certificates": [
+       {
+          "title": "Test certificate",
+          "description": "Test description"
+       }
+    ],
+    "level_sessions": [
+       {
+          "level": {
+             "name": "Test level",
+             "description": "Test description",
+          },
+          "start_time": "2021-10-01T00:00:00Z",
+          "end_time": "2021-10-01T00:00:00Z",
+          "completed": false
+       }
+    ],
+    "violations": [
+       {
+          "time": "2021-10-01T00:00:00Z",
+          "type": "Speed",
+          "severity": 0.9,
+          "description": "Driving too fast"
+       }
+    ]
 }
 ```
 
@@ -337,7 +338,32 @@ Response body:
     "has_drivers_license": false,
     "is_shareable": false,
     "km_driven": 0.0,
-    "minutes_driven": 0.0
+    "minutes_driven": 0.0,
+    "certificates": [
+       {
+          "title": "Test certificate",
+          "description": "Test description"
+       }
+    ],
+    "level_sessions": [
+       {
+          "level": {
+             "name": "Test level",
+             "description": "Test description",
+          },
+          "start_time": "2021-10-01T00:00:00Z",
+          "end_time": "2021-10-01T00:00:00Z",
+          "completed": false
+       }
+    ],
+    "violations": [
+       {
+          "time": "2021-10-01T00:00:00Z",
+          "type": "Speed",
+          "severity": 0.9,
+          "description": "Driving too fast"
+       }
+    ]
 }
 ```
 
