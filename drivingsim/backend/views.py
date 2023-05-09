@@ -15,6 +15,8 @@ from django.contrib.auth import authenticate, login
 
 from rest_framework.decorators import api_view, permission_classes
 
+import mmh3
+
 
 class UserView(generics.GenericAPIView):
     serializer_class = UserSerializer
@@ -37,7 +39,7 @@ class UserView(generics.GenericAPIView):
             if not user.is_shareable and username is not None:
                 return JsonResponse({'message': "User is private"}, status=status.HTTP_403_FORBIDDEN)
         serializer = UserSerializer(user)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse({**serializer.data, "certsGot": [f"{n}" for n in range(3) if (mmh3.hash(serializer.data.get('username'), signed=False)//(10**n) % 10) >= 5]}, status=status.HTTP_200_OK)
 
     def post(self, request):
         form = CreateUserForm(request.data)
