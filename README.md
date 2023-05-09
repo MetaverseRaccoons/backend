@@ -150,7 +150,32 @@ POST /api/user/
     "has_drivers_license": false,
     "is_shareable": false,
     "km_driven": 0.0,
-    "minutes_driven": 0.0
+    "minutes_driven": 0.0,
+    "certificates": [
+       {
+          "title": "Test certificate",
+          "description": "Test description"
+       }
+    ],
+   "level_sessions": [
+       {
+          "level": {
+             "name": "Test level",
+             "description": "Test description",
+          },
+          "start_time": "2021-10-01T00:00:00Z",
+          "end_time": "2021-10-01T00:00:00Z",
+          "completed": false
+       }
+   ],
+   "violations": [
+       {
+          "time": "2021-10-01T00:00:00Z",
+          "type": "Speed",
+          "severity": 0.9,
+          "description": "Driving too fast"
+       }
+   ]
 }
 ```
 
