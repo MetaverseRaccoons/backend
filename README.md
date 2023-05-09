@@ -28,6 +28,9 @@ We are using Django to run a REST API.
    18. [View leaderboard of violations made](#view-leaderboard-of-violations-made)
    19. [Add kilometers](#add-kilometers)
    20. [Add minutes](#add-minutes)
+   21. [View all levels](#view-all-levels)
+   22. [View a specific level](#view-a-specific-level)
+   23. [View a level's sessions](#view-a-levels-sessions)
 
 ## Setup
 
@@ -739,3 +742,75 @@ Response body:
 }
 ```
 
+### View all levels
+
+```
+GET /api/level/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+```json
+[
+  {
+    "name": "Test level 1",
+    "description": "Test level description 1"
+  }, 
+  {
+    "name": "Test level 2",
+    "description": "Test level description 2"
+  }
+]
+```
+
+### View a specific level
+
+```
+GET /api/level/<level name>/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+```json
+{
+  "name": "Test level 1",
+  "description": "Test level description 1"
+}
+```
+
+### View a level's sessions
+
+```
+GET /api/level/<level name>/sessions/
+```
+
+Headers:
+
+```
+Authorization: Bearer <access token>
+```
+
+Response body:
+
+```json
+[
+  {
+    "id": 1,
+    "start_time": "2021-07-31T00:00:00Z",
+    "end_time": "2021-07-31T10:00:00Z",
+    "completed": false
+  }
+]
+```
